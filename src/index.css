@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;500;700;800&display=swap');
+
+@font-face {
+    font-family: 'A-Space-Demo-Light';
+    src: url("./components/fonts/A-Space_Light_Demo.otf");
+}
+body{
+    margin: 0;
+    background-color: #F3F3F3;
+    ::-webkit-scrollbar {
+        width: 0px;
+        background: transparent; /* make scrollbar transparent */
+    }
+}

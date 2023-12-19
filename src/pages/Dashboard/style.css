@@ -1,0 +1,5 @@
+.inputSearch:focus{
+    border: none;
+    outline: none;
+    font-family: 'Poppins';
+}

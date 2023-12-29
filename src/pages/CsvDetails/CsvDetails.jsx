@@ -61,11 +61,7 @@ const CsvDetails = () => {
             />
           </Box>
 
-          <CustomTable
-            label={comparisonHeader}
-            data={data.csvData}
-            paginationHidden
-          />
+          <CustomTable label={comparisonHeader} data={data.csvData} />
         </>
       )}
     </Container>

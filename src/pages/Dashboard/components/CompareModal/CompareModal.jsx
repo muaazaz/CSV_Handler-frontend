@@ -26,10 +26,12 @@ import {
 import SquareRoundedIcon from "@mui/icons-material/SquareRounded";
 import { useGetTagsQuery } from "../../../../RTKQuery/TagsService/tagsApi";
 import { useCreateComparisonMutation } from "../../../../RTKQuery/ComparisonService/ComparisonApi";
+import { useNavigate } from "react-router-dom";
 
 const CompareModal = ({ open, setOpen }) => {
   const [selectedTags, setSelectedTags] = useState([]);
   const [createComparison] = useCreateComparisonMutation();
+  const navigate = useNavigate();
   const { data } = useGetTagsQuery("compareTags", {
     skip: !open, // Skip the query if the modal is not open
   });
@@ -51,7 +53,9 @@ const CompareModal = ({ open, setOpen }) => {
 
   const handleCompare = async () => {
     try {
-      await createComparison({ tags: selectedTags });
+      const resp = await createComparison({ tags: selectedTags });
+      console.log(resp);
+      navigate(`/report/details/${resp.data.id}`);
       setSelectedTags([]);
       setOpen(false);
     } catch (error) {
@@ -102,7 +106,7 @@ const CompareModal = ({ open, setOpen }) => {
               <Box sx={selectedContainer} key={tag.name + index}>
                 <Typography sx={tagNameStyles}>{tag.name}</Typography>
                 <Typography sx={tagInfoStyles}>
-                  <Typography sx={{ color: "#5184EC" }}>
+                  <Typography variant={"caption"} sx={{ color: "#5184EC" }}>
                     {tag.uploadedFiles}
                   </Typography>
                   files selected for comparing

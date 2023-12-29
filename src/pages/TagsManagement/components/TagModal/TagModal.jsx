@@ -30,7 +30,7 @@ const TagModal = ({ open, setOpen, tag }) => {
   const [updateTag] = useUpdateTagMutation();
 
   const handleClose = () => {
-    setOpen((prev) => !prev);
+    setOpen(false);
   };
   const handleTagChange = (e) => {
     setFormData({ ...formData, name: e.target.value });
@@ -39,7 +39,7 @@ const TagModal = ({ open, setOpen, tag }) => {
   const handleSubmit = async () => {
     try {
       setFormData({ name: "" });
-      setOpen((prev) => !prev);
+      setOpen(false);
       if (tag) {
         await updateTag({ id: tag.id, formData });
       } else {

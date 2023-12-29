@@ -12,7 +12,10 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 import Upload from "./components/Upload/Upload";
 import "./style.css";
 import MappingModal from "./components/MappingModal/MappingModal";
-import { useGetFilesQuery } from "../../RTKQuery/FileService/fileApi";
+import {
+  useGetFilesBySearchQuery,
+  useGetFilesQuery,
+} from "../../RTKQuery/FileService/fileApi";
 import { dashboardTableHeader } from "../../constants/componentConstants";
 import ActionButton from "./components/ActionButton/ActionButton";
 import Loader from "../../components/Loader/Loader";
@@ -24,30 +27,48 @@ const Dashboard = () => {
   const [mapModal, setMapModal] = useState(false);
   const { data, isLoading } = useGetFilesQuery();
   const [uploading, setUploading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [search, setSearch] = useState(false);
+
+  const { data: searchResult, isLoading: searchQueryLoading } =
+    useGetFilesBySearchQuery(searchQuery, {
+      skip: !search,
+    });
+
+  const handleSearch = () => {
+    setSearch(true);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearch(false);
+    setSearchQuery(e.target.value);
+  };
+
   return (
     <Container sx={mainDiv}>
       <Box sx={headerDiv}>
         <Typography sx={{ fontSize: "1.438rem", fontWeight: "600" }}>
           Dashboard
         </Typography>
-        <div style={searchField}>
+        <Box sx={searchField}>
           <input
             type="text"
             style={searchInput}
             className="inputSearch"
             placeholder="Search by File Name or Tag..."
+            onChange={handleSearchChange}
           />
-          <IconButton>
+          <IconButton onClick={handleSearch}>
             <img src="Research.png" alt="" />
           </IconButton>
-        </div>
+        </Box>
         <Box sx={buttonsDiv}>
           <Button
             startIcon={<img src="Vector.png" alt="" />}
             color="secondary"
             variant="contained"
             sx={{ color: "#F3F3F3", marginRight: "1rem" }}
-            onClick={() => setCompareModal((prev) => !prev)}
+            onClick={() => setCompareModal(true)}
           >
             Compare Tags
           </Button>
@@ -56,17 +77,17 @@ const Dashboard = () => {
             color="primary"
             variant="contained"
             sx={{ color: "#F3F3F3" }}
-            onClick={() => setUploadModal((prev) => !prev)}
+            onClick={() => setUploadModal(true)}
           >
             Upload Csv
           </Button>
         </Box>
       </Box>
-      {isLoading ? (
+      {isLoading || searchQueryLoading ? (
         <Loader />
       ) : (
         <CustomTable
-          data={data}
+          data={searchResult || data}
           label={dashboardTableHeader}
           view
           action={<ActionButton />}

@@ -23,7 +23,7 @@ import { tagContainer } from "./styles";
 import CustomSelect from "../../../../components/CustomSelect/CustomSelect";
 import { useSelector } from "react-redux";
 import { fileMappingOptions } from "../../../../constants/componentConstants";
-import { useCreateCsvMutation } from "../../../../RTKQuery/CsvService/csvApi";
+import { useCreateCsvDataMutation } from "../../../../RTKQuery/CsvDataService/csvDataApi";
 import { useUpdateFileMutation } from "../../../../RTKQuery/FileService/fileApi";
 import { useGetTagsQuery } from "../../../../RTKQuery/TagsService/tagsApi";
 import Loader from "../../../../components/Loader/Loader";
@@ -32,24 +32,27 @@ const MappingModal = ({ open, setOpen, setUploading, setUploadModal }) => {
   const [tag, setTag] = useState(null);
   const [mappedValues, setMappedValues] = useState({});
   const [error, setError] = useState("");
-  const [createCsv] = useCreateCsvMutation();
+  const [createCsv] = useCreateCsvDataMutation();
   const [updateFile] = useUpdateFileMutation();
-  const { data, isLoading } = useGetTagsQuery();
+  const { data, isLoading, refetch } = useGetTagsQuery();
   const { file, fileHeaders, fileData } = useSelector((state) => state.file);
 
   const handleClose = () => {
-    setOpen((prev) => !prev);
+    setOpen(false);
+    setUploading(false);
   };
 
   const handleGoingBack = () => {
-    setUploading((prev) => !prev);
-    setUploadModal((prev) => !prev);
+    setUploadModal(true);
+    setOpen(false);
   };
 
   const handleCsvSave = async () => {
     setError("");
+    setMappedValues({});
+    setTag(null);
     if (tag && mappedValues) {
-      setUploading((prev) => !prev);
+      setUploading(false);
       const newMappedCsv = [];
       fileData.forEach((row) => {
         const newRow = {};
@@ -58,16 +61,21 @@ const MappingModal = ({ open, setOpen, setUploading, setUploadModal }) => {
             newRow[mappedValues[key]] = val;
           }
         });
-        newMappedCsv.push({ ...newRow, fileId: file.id });
+        newMappedCsv.push({ ...newRow, uploadedFile: file.id });
       });
       let tagId = null;
+      let fileNumber = null;
       data?.forEach((element) => {
-        if (element.name === tag) tagId = element.id;
+        if (element.name === tag) {
+          tagId = element.id;
+          fileNumber = element.uploadedFiles + 1;
+        }
       });
       try {
-        await updateFile({ id: file.id, formData: { tagId } });
+        await updateFile({ id: file.id, formData: { tag: tagId, fileNumber } });
         await createCsv(newMappedCsv);
-        setOpen((prev) => !prev);
+        refetch();
+        setOpen(false);
       } catch (error) {
         console.log(error);
       }

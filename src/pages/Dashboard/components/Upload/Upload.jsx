@@ -1,13 +1,15 @@
 import {
+  Alert,
   Box,
   Button,
   Container,
   Divider,
   IconButton,
   Modal,
+  Snackbar,
   Typography,
 } from "@mui/material";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import {
   cancelContainer,
@@ -33,24 +35,38 @@ const Upload = ({ open, setOpen, setMapModal, uploading, setUploading }) => {
   const dispatch = useDispatch();
   const [uploadFile] = useUploadFileMutation();
   const [fileName, setFileName] = useState(false);
+  const [error, setError] = useState("");
   const { progress } = useSelector((state) => state.file);
 
   const fileUploadComplete = () => {
-    setMapModal((prev) => !prev);
-    setOpen((prev) => !prev);
+    setMapModal(true);
+    setOpen(false);
   };
 
   const handleClose = () => {
-    setOpen((prev) => !prev);
+    setOpen(false);
   };
   const handleUpload = () => {
     !uploading && inputRef.current.click();
   };
-  const handleFileChange = async (e) => {
-    setUploading((prev) => !prev);
+  const handleDrop = (event) => {
+    event.preventDefault();
+    console.log(event.dataTransfer.files[0]);
+    if (event.dataTransfer.files[0]?.type === "text/csv") {
+      console.log("true");
+      // handleFileUpload(event.dataTransfer.files[0])
+    } else {
+      setError("Please only upload csv files");
+    }
+  };
+  const handleFileChange = (e) => {
     setFileName(e.target.files[0].name);
+    handleFileUpload(e.target.files[0]);
+  };
+  const handleFileUpload = async (file) => {
     const formData = new FormData();
-    formData.append("file", e.target.files[0]);
+    formData.append("file", file);
+    setUploading(true);
     try {
       const {
         data: { file, fileData, fileHeaders },
@@ -62,6 +78,14 @@ const Upload = ({ open, setOpen, setMapModal, uploading, setUploading }) => {
       console.log(error);
     }
   };
+  const handleErrorClose = () => {
+    setError("");
+  };
+  useEffect(() => {
+    if (progress === 100 && uploading) {
+      fileUploadComplete();
+    }
+  });
   return (
     <Modal
       open={open}
@@ -75,12 +99,20 @@ const Upload = ({ open, setOpen, setMapModal, uploading, setUploading }) => {
           </IconButton>
         </Box>
         <Divider sx={divider} />
-        <Box sx={uploadContainer} onClick={handleUpload}>
+        <Box
+          style={uploadContainer}
+          onClick={handleUpload}
+          onDrop={handleDrop}
+          onDragOver={(e) => e.preventDefault()}
+          onDragEnter={(e) => e.preventDefault()}
+        >
           <UploadFileIcon
             sx={{ width: "5rem", height: "5rem", color: "#808080" }}
           />
           {!uploading ? (
-            <Typography sx={textStyles}>Click here to upload CSV</Typography>
+            <Typography sx={textStyles}>
+              Drop or Click here to upload CSV
+            </Typography>
           ) : (
             <Box onClick={fileUploadComplete}>
               <Typography sx={textStyles} color={"primary"}>
@@ -108,6 +140,19 @@ const Upload = ({ open, setOpen, setMapModal, uploading, setUploading }) => {
             Cancel
           </Button>
         </Box>
+        <Snackbar
+          open={error ? true : false}
+          anchorOrigin={{ horizontal: "center", vertical: "top" }}
+          action={
+            <IconButton onClick={handleErrorClose}>
+              <HighlightOffIcon />
+            </IconButton>
+          }
+        >
+          <Alert severity="error" sx={{ width: "100%" }}>
+            {error}
+          </Alert>
+        </Snackbar>
       </Container>
     </Modal>
   );

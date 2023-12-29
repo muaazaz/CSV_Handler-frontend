@@ -1,5 +1,4 @@
 const mainDiv = {
-    minWidth: "90%",
     backgroundColor: "white",
     margin: "0 auto",
     borderRadius: "24px",
@@ -8,10 +7,13 @@ const mainDiv = {
   headerDiv = {
     display: "flex",
     alignItems: "center",
+    flexDirection: { md: "row", xs: "column" },
+    gap: { md: "0rem", xs: "1rem" },
   },
   buttonsDiv = {
     display: "flex",
-    justifyContent: "flex-end",
+    justifyContent: { md: "flex-end", xs: "center" },
+    alignItems: { md: "none", xs: "center" },
     flexGrow: "1",
   },
   searchField = {
@@ -22,7 +24,7 @@ const mainDiv = {
     height: "2.813rem",
     borderRadius: "12px",
     width: "21.875rem",
-    marginLeft: "2rem",
+    marginLeft: { md: "2rem", xs: "0rem" },
     padding: "0px, 8px, 0px, 16px",
   },
   searchInput = {
@@ -30,6 +32,7 @@ const mainDiv = {
     borderRadius: "12px",
     minHeight: "80%",
     width: "70%",
+    fontFamily: "Poppins",
   };
 
 export { mainDiv, headerDiv, buttonsDiv, searchField, searchInput };

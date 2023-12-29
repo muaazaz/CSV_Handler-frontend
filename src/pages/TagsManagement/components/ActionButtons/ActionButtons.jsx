@@ -11,12 +11,12 @@ const ActionButtons = ({ data, setTagEditModal, setTag }) => {
   const [tagDeleteModal, setTagDeleteModal] = useState(false);
 
   const handleEdit = () => {
-    setTagEditModal((prev) => !prev);
+    setTagEditModal(true);
     setTag(data);
   };
 
   const handleDelete = async () => {
-    setTagDeleteModal((prev) => !prev);
+    setTagDeleteModal(true);
     try {
       await deleteTag(data.id);
     } catch (error) {
@@ -25,21 +25,18 @@ const ActionButtons = ({ data, setTagEditModal, setTag }) => {
   };
 
   useEffect(() => {
-    if (data.filesId > 0) {
+    if (data.uploadedFiles > 0) {
       setDisabled(true);
     } else {
       setDisabled(false);
     }
-  }, [setDisabled, data.filesId]);
+  }, [setDisabled, data.uploadedFiles]);
   return (
     <Box>
       <IconButton onClick={handleEdit}>
         <BorderColorOutlinedIcon />
       </IconButton>
-      <IconButton
-        disabled={disabled}
-        onClick={() => setTagDeleteModal((prev) => !prev)}
-      >
+      <IconButton disabled={disabled} onClick={() => setTagDeleteModal(true)}>
         <DeleteOutlineOutlinedIcon color={disabled ? "disabled" : ""} />
       </IconButton>
       <DeleteModal

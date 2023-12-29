@@ -5,15 +5,15 @@ export const tagsApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:5000/",
   }),
-  tagTypes: ["tags"],
+  tagTypes: ["file", "tags"],
   endpoints: (builder) => ({
     getTags: builder.query({
       query: (payload) => `tags?type=${payload}`,
-      providesTags: ["tags"],
+      providesTags: ["file", "tags"],
     }),
     getTagbyId: builder.query({
       query: (id) => `tags/${id}`,
-      providesTags: ["tags"],
+      providesTags: ["file", "tags"],
     }),
     createTag: builder.mutation({
       query: (body) => ({

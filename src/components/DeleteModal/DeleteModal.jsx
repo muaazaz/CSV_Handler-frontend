@@ -17,7 +17,7 @@ import { deleteContainer } from "./styles";
 
 const DeleteModal = ({ open, setOpen, name, type, handleDelete }) => {
   const handleClose = () => {
-    setOpen((prev) => !prev);
+    setOpen(false);
   };
 
   return (

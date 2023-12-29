@@ -1,6 +1,5 @@
 const mainDiv = {
     display: { md: "flex", xs: "none" },
-    flexGrow: "1",
   },
   responsiveDiv = {
     color: "#007AFF",
@@ -8,6 +7,7 @@ const mainDiv = {
     flexGrow: "1",
   },
   appBar = {
+    width: "100%",
     backgroundColor: "white",
     marginBottom: "3%",
     paddingInline: "3.75em",
@@ -32,6 +32,13 @@ const mainDiv = {
     minHeight: "100%",
     marginRight: "5em",
   },
+  nameText = {
+    fontSize: "1.4375rem",
+    fontStyle: "normal",
+    fontWeight: "500",
+    lineHeight: "150%",
+    color: "black",
+  },
   NavStyles = ({ isActive }) => {
     return {
       color: isActive ? "black" : "gray",
@@ -52,4 +59,5 @@ export {
   responsiveNavStyles,
   avatarDiv,
   logoText,
+  nameText,
 };

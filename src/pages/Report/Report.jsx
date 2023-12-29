@@ -6,9 +6,10 @@ import { reportTableHeader } from "../../constants/componentConstants";
 import ActionButtons from "./components/ActionButtons/ActionButtons";
 import Loader from "../../components/Loader/Loader";
 import { reportsDummyData } from "../../constants/dummyData";
+import { useGetComparisonsQuery } from "../../RTKQuery/ComparisonService/ComparisonApi";
 
 const Report = () => {
-  const isLoading = false;
+  const { data, isLoading } = useGetComparisonsQuery();
 
   return (
     <Container sx={mainDiv}>
@@ -20,7 +21,7 @@ const Report = () => {
       {!isLoading ? (
         <CustomTable
           label={reportTableHeader}
-          data={reportsDummyData}
+          data={data}
           action={<ActionButtons />}
           view
         />

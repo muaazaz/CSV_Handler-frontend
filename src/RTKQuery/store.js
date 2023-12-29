@@ -1,22 +1,25 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { csvApi } from "./CsvService/csvApi";
 import { fileApi } from "./FileService/fileApi";
 import fileSlice from "./FileService/fileSlice";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { tagsApi } from "./TagsService/tagsApi";
+import { csvDataApi } from "./CsvDataService/csvDataApi";
+import { comparisonApi } from "./ComparisonService/ComparisonApi";
 
 export const store = configureStore({
   reducer: {
     [fileApi.reducerPath]: fileApi.reducer,
-    [csvApi.reducerPath]: csvApi.reducer,
+    [csvDataApi.reducerPath]: csvDataApi.reducer,
     [tagsApi.reducerPath]: tagsApi.reducer,
+    [comparisonApi.reducerPath]: comparisonApi.reducer,
     file: fileSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
       fileApi.middleware,
-      csvApi.middleware,
-      tagsApi.middleware
+      csvDataApi.middleware,
+      tagsApi.middleware,
+      comparisonApi.middleware
     ),
 });
 

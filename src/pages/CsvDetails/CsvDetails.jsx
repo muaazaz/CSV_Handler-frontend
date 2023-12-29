@@ -1,9 +1,6 @@
 import { Box, Button, Container, Typography } from "@mui/material";
 import React, { useRef } from "react";
 import {
-  comparisonContainer,
-  comparisonTitle,
-  comparisonsContainer,
   headerContainer,
   mainContainer,
   titleContainer,
@@ -15,13 +12,13 @@ import { comparisonHeader } from "../../constants/componentConstants";
 import { CSVLink } from "react-csv";
 import { generateCSVData } from "../../utils/csv";
 import { useNavigate, useParams } from "react-router-dom";
-import { useGetComparisonByIdQuery } from "../../RTKQuery/ComparisonService/ComparisonApi";
 import Loader from "../../components/Loader/Loader";
+import { useGetFileByIdQuery } from "../../RTKQuery/FileService/fileApi";
 
-const ReportDetails = () => {
+const CsvDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { data, isLoading } = useGetComparisonByIdQuery(id);
+  const { data, isLoading } = useGetFileByIdQuery(id);
   const csvData = generateCSVData(data?.reports);
   const downloadRef = useRef();
 
@@ -44,7 +41,7 @@ const ReportDetails = () => {
               >
                 Go Back
               </Button>
-              <Typography sx={titleStyles}>{data.title}</Typography>
+              <Typography sx={titleStyles}>{data.originalName}</Typography>
             </Box>
             <Button
               color="secondary"
@@ -56,30 +53,23 @@ const ReportDetails = () => {
               Export CSV
             </Button>
             <CSVLink
+              headers={csvData?.headers || []}
               data={csvData?.data || ""}
-              headers={csvData?.headers || ""}
               filename={data?.title}
               style={{ display: "none" }}
               ref={downloadRef}
             />
           </Box>
-          <Box sx={comparisonsContainer}>
-            {data &&
-              data?.reports.map((element, index) => (
-                <Box sx={comparisonContainer} key={element.title + index}>
-                  <Typography sx={comparisonTitle}>{element.title}</Typography>
-                  <CustomTable
-                    label={comparisonHeader}
-                    data={element.matchedRecords}
-                    paginationHidden
-                  />
-                </Box>
-              ))}
-          </Box>
+
+          <CustomTable
+            label={comparisonHeader}
+            data={data.csvData}
+            paginationHidden
+          />
         </>
       )}
     </Container>
   );
 };
 
-export default ReportDetails;
+export default CsvDetails;

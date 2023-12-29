@@ -18,6 +18,8 @@ import {
   appBar,
   avatarDiv,
   logoText,
+  mainDiv,
+  nameText,
   responsiveDiv,
   responsiveNavStyles,
 } from "./styles";
@@ -73,12 +75,14 @@ const Navbar = () => {
             alignItems: "center",
           }}
         >
-          <img src="/gigalabs-logo.png" alt="logo" />
-          <span style={logoText}>Gigalabs</span>
+          <Box sx={mainDiv}>
+            <img src="/gigalabs-logo.png" alt="logo" />
+            <span style={logoText}>Gigalabs</span>
+          </Box>
           <Tabs
             value={tabValue}
             onChange={handleTabChange}
-            sx={{ marginTop: "1.3%" }}
+            sx={{ marginTop: "1.3%", ...mainDiv }}
           >
             {pages.map((page, index) => (
               <Tab
@@ -115,8 +119,8 @@ const Navbar = () => {
           </Box>
           {/* User avatar menu */}
           <Box sx={avatarDiv}>
-            <IconButton sx={{ float: "right" }} onClick={handleUserMenu}>
-              <Typography variant="content">{"John Doe"}</Typography>
+            <Typography sx={nameText}>{"John Doe"}</Typography>
+            <IconButton onClick={handleUserMenu} sx={nameText}>
               <ExpandMoreIcon />
             </IconButton>
             <Menu
@@ -128,10 +132,8 @@ const Navbar = () => {
                 horizontal: "left",
               }}
             >
-              <MenuItem>
-                <Button sx={{ color: "gray" }} onClick={handleLogout}>
-                  Log Out
-                </Button>
+              <MenuItem onClick={handleLogout}>
+                <Typography sx={{ fontSize: "0.9rem" }}>Log Out</Typography>
               </MenuItem>
             </Menu>
           </Box>

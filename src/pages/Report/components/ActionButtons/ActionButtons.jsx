@@ -1,23 +1,30 @@
 import { Box, IconButton } from "@mui/material";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { useNavigate } from "react-router-dom";
 import { CSVLink } from "react-csv";
-import { reportDetail } from "../../../../constants/dummyData";
 import { generateCSVData } from "../../../../utils/csv";
+import { useGetComparisonByIdQuery } from "../../../../RTKQuery/ComparisonService/ComparisonApi";
 
-const ActionButtons = ({ data }) => {
+const ActionButtons = ({ data: comparison }) => {
   const navigate = useNavigate();
   const downloadRef = useRef();
-  const { headers, data: csvData } = generateCSVData(reportDetail.comparisons);
+  const { data } = useGetComparisonByIdQuery(comparison.id);
+  const [csvData, setCsvData] = useState(null);
 
   const handleDownload = () => {
     downloadRef.current.link.click();
   };
   const handleView = async () => {
-    navigate(`/report/details/${data.id}`);
+    navigate(`/report/details/${comparison.id}`);
   };
+  useEffect(() => {
+    if (data) {
+      const response = generateCSVData(data?.reports);
+      setCsvData({ ...response });
+    }
+  }, [data]);
   return (
     <Box>
       <IconButton onClick={handleDownload}>
@@ -27,9 +34,9 @@ const ActionButtons = ({ data }) => {
         <VisibilityOutlinedIcon />
       </IconButton>
       <CSVLink
-        data={csvData}
-        headers={headers}
-        filename={`${reportDetail.reportNumber}`}
+        headers={csvData?.headers || []}
+        data={csvData?.data || ""}
+        filename={data?.title}
         style={{ display: "none" }}
         ref={downloadRef}
       />

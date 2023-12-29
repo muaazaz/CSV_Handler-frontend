@@ -1,14 +1,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-export const csvApi = createApi({
+export const csvDataApi = createApi({
   reducerPath: "csvApi",
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:5000/",
   }),
   endpoints: (builder) => ({
-    createCsv: builder.mutation({
+    createCsvData: builder.mutation({
       query: (body) => ({
-        url: "csv",
+        url: "csv-data",
         method: "POST",
         body,
       }),
@@ -17,4 +17,4 @@ export const csvApi = createApi({
   }),
 });
 
-export const { useCreateCsvMutation } = csvApi;
+export const { useCreateCsvDataMutation } = csvDataApi;

@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const comparisonApi = createApi({
   reducerPath: "comparisonApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/",
+    baseUrl: process.env.REACT_APP_BACKEND_URL,
   }),
   tagTypes: ["comparison"],
   endpoints: (builder) => ({

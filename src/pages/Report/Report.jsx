@@ -5,7 +5,6 @@ import { headerDiv, mainDiv } from "./styles";
 import { reportTableHeader } from "../../constants/componentConstants";
 import ActionButtons from "./components/ActionButtons/ActionButtons";
 import Loader from "../../components/Loader/Loader";
-import { reportsDummyData } from "../../constants/dummyData";
 import { useGetComparisonsQuery } from "../../RTKQuery/ComparisonService/ComparisonApi";
 
 const Report = () => {

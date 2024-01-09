@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const tagsApi = createApi({
   reducerPath: "tagsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/",
+    baseUrl: process.env.REACT_APP_BACKEND_URL,
   }),
   tagTypes: ["file", "tags"],
   endpoints: (builder) => ({

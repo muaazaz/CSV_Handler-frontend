@@ -29,7 +29,7 @@ import { useGetTagsQuery } from "../../../../RTKQuery/TagsService/tagsApi";
 import Loader from "../../../../components/Loader/Loader";
 
 const MappingModal = ({ open, setOpen, setUploading, setUploadModal }) => {
-  const [tag, setTag] = useState(null);
+  const [tag, setTag] = useState("");
   const [mappedValues, setMappedValues] = useState({});
   const [error, setError] = useState("");
   const [createCsv] = useCreateCsvDataMutation();
@@ -49,8 +49,6 @@ const MappingModal = ({ open, setOpen, setUploading, setUploadModal }) => {
 
   const handleCsvSave = async () => {
     setError("");
-    setMappedValues({});
-    setTag(null);
     if (tag && mappedValues) {
       setUploading(false);
       const newMappedCsv = [];
@@ -61,7 +59,7 @@ const MappingModal = ({ open, setOpen, setUploading, setUploadModal }) => {
             newRow[mappedValues[key]] = val;
           }
         });
-        newMappedCsv.push({ ...newRow, uploadedFile: file.id });
+        newMappedCsv.push({ ...newRow, uploadedFile: { id: file.id } });
       });
       let tagId = null;
       let fileNumber = null;
@@ -74,6 +72,8 @@ const MappingModal = ({ open, setOpen, setUploading, setUploadModal }) => {
       try {
         await updateFile({ id: file.id, formData: { tag: tagId, fileNumber } });
         await createCsv(newMappedCsv);
+        setMappedValues({});
+        setTag("");
         refetch();
         setOpen(false);
       } catch (error) {
@@ -102,11 +102,11 @@ const MappingModal = ({ open, setOpen, setUploading, setUploadModal }) => {
             <Box sx={tagContainer}>
               <Typography sx={textStyles}>
                 <img src="document.png" alt="" />
-                {file.originalname}
+                {file.originalName}
               </Typography>
               <CustomSelect
                 value={tag}
-                setValue={setTag}
+                setValue={(val) => setTag(val)}
                 placeholder={"Select a File Tag"}
                 label={"File Tag"}
                 options={data}
@@ -128,7 +128,7 @@ const MappingModal = ({ open, setOpen, setUploading, setUploadModal }) => {
                       removeArrow
                     />
                     <CustomSelect
-                      value={mappedValues[parameter]}
+                      value={mappedValues[parameter] || ""}
                       setValue={(val) =>
                         setMappedValues({ ...mappedValues, [parameter]: val })
                       }

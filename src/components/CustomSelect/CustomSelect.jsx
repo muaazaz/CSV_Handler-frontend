@@ -32,7 +32,7 @@ const CustomSelect = ({
       </Typography>
       <Select
         onChange={handleChange}
-        value={value}
+        value={value || ""}
         defaultValue={defaultValue}
         disabled={disabled}
         renderValue={(val) => {

@@ -120,7 +120,6 @@ const MappingModal = ({ open, setOpen, setUploading, setUploadModal }) => {
                   <Box sx={mapSelectContainer} key={index + parameter}>
                     <CustomSelect
                       value={parameter}
-                      defaultValue={parameter}
                       placeholder={"Select a File Tag"}
                       label={`Parameter ${index + 1}`}
                       options={fileHeaders}

@@ -64,7 +64,7 @@ const ReportDetails = () => {
             />
           </Box>
           <Box sx={comparisonsContainer}>
-            {data &&
+            {data?.reports ? (
               data?.reports.map((element, index) => (
                 <Box sx={comparisonContainer} key={element.title + index}>
                   <Typography sx={comparisonTitle}>{element.title}</Typography>
@@ -74,7 +74,14 @@ const ReportDetails = () => {
                     paginationHidden
                   />
                 </Box>
-              ))}
+              ))
+            ) : (
+              <Box>
+                <Typography sx={titleStyles}>
+                  Nothing Seems to be common in these files!.
+                </Typography>
+              </Box>
+            )}
           </Box>
         </>
       )}

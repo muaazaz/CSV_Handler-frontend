@@ -13,14 +13,19 @@ const mainContainer = {
     alignItems: "center",
   },
   uploadContainer = {
-    height: "28.125rem",
-    backgroundColor: "#E6EDFB",
     display: "flex",
+    backgroundColor: "#E6EDFB",
+    height: "28.125rem",
+    width: "100%",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: "23px",
+    border: "2px solid white",
     cursor: "pointer",
+    "&:hover": {
+      border: "2px dashed #808080",
+    },
   },
   cancelContainer = {
     display: "flex",

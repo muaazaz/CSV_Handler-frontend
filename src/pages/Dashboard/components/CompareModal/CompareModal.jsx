@@ -54,7 +54,6 @@ const CompareModal = ({ open, setOpen }) => {
   const handleCompare = async () => {
     try {
       const resp = await createComparison({ tags: selectedTags });
-      console.log(resp);
       navigate(`/report/details/${resp.data.id}`);
       setSelectedTags([]);
       setOpen(false);

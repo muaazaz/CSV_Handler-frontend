@@ -31,7 +31,7 @@ import {
 } from "../../../../RTKQuery/FileService/fileSlice";
 
 const Upload = ({ open, setOpen, setMapModal, uploading, setUploading }) => {
-  const inputRef = useRef();
+  const inputRef = useRef(null);
   const dispatch = useDispatch();
   const [uploadFile] = useUploadFileMutation();
   const [fileName, setFileName] = useState(false);
@@ -49,12 +49,16 @@ const Upload = ({ open, setOpen, setMapModal, uploading, setUploading }) => {
   const handleUpload = () => {
     !uploading && inputRef.current.click();
   };
+  const handleDrag = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+  };
   const handleDrop = (event) => {
     event.preventDefault();
-    console.log(event.dataTransfer.files[0]);
-    if (event.dataTransfer.files[0]?.type === "text/csv") {
-      console.log("true");
-      // handleFileUpload(event.dataTransfer.files[0])
+    setError("");
+    const files = Array.from(event.dataTransfer.files);
+    if (files[0]?.type === "text/csv") {
+      handleFileUpload(files[0]);
     } else {
       setError("Please only upload csv files");
     }
@@ -100,11 +104,13 @@ const Upload = ({ open, setOpen, setMapModal, uploading, setUploading }) => {
         </Box>
         <Divider sx={divider} />
         <Box
-          style={uploadContainer}
-          onClick={handleUpload}
+          sx={uploadContainer}
+          onDragOver={handleDrag}
           onDrop={handleDrop}
-          onDragOver={(e) => e.preventDefault()}
-          onDragEnter={(e) => e.preventDefault()}
+          onDragEnter={handleDrag}
+          onDragLeave={handleDrag}
+          accept="*"
+          onClick={handleUpload}
         >
           <UploadFileIcon
             sx={{ width: "5rem", height: "5rem", color: "#808080" }}

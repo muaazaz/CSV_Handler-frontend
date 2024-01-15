@@ -58,12 +58,14 @@ export default function CustomTable({
               </TableRow>
             </TableHead>
             <TableBody>
-              {data
-                ?.slice(
-                  (page - 1) * rowsPerPage,
-                  (page - 1) * rowsPerPage + rowsPerPage
-                )
-                .map((row, i) => (
+              {data &&
+                (paginationHidden
+                  ? data
+                  : data.slice(
+                      (page - 1) * rowsPerPage,
+                      (page - 1) * rowsPerPage + rowsPerPage
+                    )
+                ).map((row, i) => (
                   <TableRow key={row + i}>
                     {Object.entries(row).map(([key, val], index) => {
                       if (key === "tags") {

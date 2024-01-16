@@ -23,15 +23,18 @@ import {
   responsiveNavStyles,
 } from "./styles";
 import { routes } from "../../constants/componentConstants";
+import { useDispatch, useSelector } from "react-redux";
+import { setGlobalData } from "../../RTKQuery/globalSlice";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false),
     [anchorEl, setAnchorEl] = useState(null),
     [openResp, setOpenResp] = useState(false),
     [anchorRespEl, setAnchorRespEl] = useState(null),
-    [tabValue, setTabValue] = useState("dashboard"),
     [pages, setPages] = useState([]),
-    navigate = useNavigate();
+    { navTab } = useSelector((state) => state.global.globalData),
+    navigate = useNavigate(),
+    dispatch = useDispatch();
 
   //TO open user menu
   const handleUserMenu = (e) => {
@@ -57,12 +60,11 @@ const Navbar = () => {
   };
 
   const handleTabChange = (e, val) => {
-    setTabValue(val);
+    dispatch(setGlobalData({ navTab: val }));
     navigate(val.replace(/ +/g, "").toLowerCase());
   };
 
   useEffect(() => {
-    setTabValue(window.location.pathname.substring(1).split("/")[0]);
     setPages(routes);
   }, []);
   return (
@@ -79,7 +81,7 @@ const Navbar = () => {
             <span style={logoText}>Gigalabs</span>
           </Box>
           <Tabs
-            value={tabValue}
+            value={navTab}
             onChange={handleTabChange}
             sx={{ marginTop: "1.3%", ...mainDiv }}
           >

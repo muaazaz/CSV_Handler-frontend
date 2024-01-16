@@ -27,6 +27,8 @@ import SquareRoundedIcon from "@mui/icons-material/SquareRounded";
 import { useGetTagsQuery } from "../../../../RTKQuery/TagsService/tagsApi";
 import { useCreateComparisonMutation } from "../../../../RTKQuery/ComparisonService/ComparisonApi";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setGlobalData } from "../../../../RTKQuery/globalSlice";
 
 const CompareModal = ({ open, setOpen }) => {
   const [selectedTags, setSelectedTags] = useState([]);
@@ -35,6 +37,7 @@ const CompareModal = ({ open, setOpen }) => {
   const { data } = useGetTagsQuery("compareTags", {
     skip: !open, // Skip the query if the modal is not open
   });
+  const dispatch = useDispatch();
 
   const handleClose = () => {
     setOpen(false);
@@ -54,6 +57,7 @@ const CompareModal = ({ open, setOpen }) => {
   const handleCompare = async () => {
     try {
       const resp = await createComparison({ tags: selectedTags });
+      dispatch(setGlobalData({ navTab: "report" }));
       navigate(`/report/details/${resp.data.id}`);
       setSelectedTags([]);
       setOpen(false);

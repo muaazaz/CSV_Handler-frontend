@@ -5,6 +5,7 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import { tagsApi } from "./TagsService/tagsApi";
 import { csvDataApi } from "./CsvDataService/csvDataApi";
 import { comparisonApi } from "./ComparisonService/ComparisonApi";
+import globalSlice from "./globalSlice";
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     [tagsApi.reducerPath]: tagsApi.reducer,
     [comparisonApi.reducerPath]: comparisonApi.reducer,
     file: fileSlice,
+    global: globalSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(

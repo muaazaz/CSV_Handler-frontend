@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   forgotPassText,
   headerText,
@@ -17,6 +17,7 @@ import {
   mainContainer,
   welcomeText,
 } from "./styles";
+import { setGlobalData } from "../../RTKQuery/globalSlice";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -25,10 +26,12 @@ const Login = () => {
     }),
     [error, setError] = useState(""),
     navigate = useNavigate(),
-    data = useSelector((state) => state.userValidation);
+    data = useSelector((state) => state.userValidation),
+    dispatch = useDispatch();
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
+    dispatch(dispatch(setGlobalData({ navTab: "dashboard" })));
     navigate("/dashboard");
   };
   useEffect(() => {
